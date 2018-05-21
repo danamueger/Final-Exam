@@ -2,6 +2,7 @@ package pkgEmpty;
 
 import static org.junit.Assert.*;
 
+
 import org.junit.Test;
 
 import pkgCore.Retirement;
@@ -38,6 +39,14 @@ public class TestFinance {
 	@Test
 	public void TestPMT() {
 
-		//TODO: Test PMT.  Make sure PMT works as expected.
+		int iYearsToWork = 40;
+		double dAnnualReturnWorking = 0.07;
+		
+		double PMT = Retirement.PMT(dAnnualReturnWorking / 12.0, iYearsToWork * 12.0, 0.0, 1454485.55, false);
+		
+		System.out.println(PMT);
+		assertEquals(554.13,Math.abs(PMT),0.01);
+
+		
 	}
 }

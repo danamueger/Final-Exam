@@ -96,12 +96,58 @@ public class RetirementController implements Initializable {
 			});
 		}
 
-		//
-		// TODO: Validate Working Annual Return %, accept only numbers and decimals
-		// TODO: Validate Years retired, accepted only decimals
-		// TODO: Validate Retired Annual Return %, accept only numbers and deciamls
-		// TODO: Validate Required Income, accept only decimals
-		// TODO: Validate Monthly SSI, accept only decimals
+		
+		txtAnnualReturnWorking.focusedProperty().addListener((arg0, oldValue, newValue) -> {
+			if (!newValue) {
+				if (!txtAnnualReturnWorking.getText().matches(("[0-9](\\.[0-9]{1,2}){0,1}|10(\\.0{1,2}){0,1}"))) {
+					txtAnnualReturnWorking.setText("");
+				}
+			}
+		});
+		
+		txtYearsToWork.focusedProperty().addListener((arg0, oldValue, newValue) -> {
+	        if (!newValue) { 
+	            if(!txtYearsToWork.getText().matches("[0-9]|[0-3][0-9]|40")){
+	            	txtYearsToWork.setText("");
+	            }
+	        }
+		});
+		
+	
+		txtYearsRetired.focusedProperty().addListener((arg0, oldValue, newValue) -> {
+	        if (!newValue) { 
+	            if(!txtYearsRetired.getText().matches("[0-9]|1[0-9]|20")){
+	            		txtYearsRetired.setText("");
+	            }
+	        }
+
+	    });
+		
+		txtAnnualReturnRetired.focusedProperty().addListener((arg0, oldValue, newValue) -> {
+	        if (!newValue) { 
+	            if(!txtAnnualReturnRetired.getText().matches("[0-9](\\.[0-9]{1,2}){0,1}|10(\\.0{1,2}){0,1}")){
+	            		txtAnnualReturnRetired.setText("");
+	            }
+	        }
+
+	    });
+
+		txtRequiredIncome.focusedProperty().addListener((arg0, oldValue, newValue) -> {
+	        if (!newValue) { 
+	            if(!txtRequiredIncome.getText().matches("264[2-9]|26[5-9][0-9]|2[7-9][0-9]{2}|[3-9][0-9]{3}|10000")){
+	            	txtRequiredIncome.setText("");
+	            }
+	        }
+	    });
+		
+		txtMonthlySSI.focusedProperty().addListener((arg0, oldValue, newValue) -> {
+	        if (!newValue) { 
+	            if(!txtMonthlySSI.getText().matches("[0-9]|[0-9]{2}|[0-9]{3}|1[0-9]{3}|2[0-5][0-9]{2}|26[0-3][0-9]|264[0-2]")){
+	            	txtMonthlySSI.setText("");
+	            }
+	        }
+
+	    });
 	}
 
 	@FXML
@@ -110,14 +156,31 @@ public class RetirementController implements Initializable {
 
 		// disable read-only controls
 		txtSaveEachMonth.setDisable(true);
+		txtSaveEachMonth.clear();
+		
 		txtWhatYouNeedToSave.setDisable(true);
+		txtWhatYouNeedToSave.clear();
 
 		// Clear, enable txtYearsToWork
 		txtYearsToWork.clear();
 		txtYearsToWork.setDisable(false);
 
-		// TODO: Clear, enable the rest of the input controls. Hint! You already have a
-		// HashMap of all the input controls....!!!!
+		txtRequiredIncome.clear();
+		txtRequiredIncome.setDisable(false);
+		
+		txtAnnualReturnWorking.clear();
+		txtAnnualReturnWorking.setDisable(false);
+
+		txtYearsRetired.clear();
+		txtYearsRetired.setDisable(false);
+
+		txtAnnualReturnRetired.clear();
+		txtAnnualReturnRetired.setDisable(false);
+
+		txtMonthlySSI.clear();
+		txtMonthlySSI.setDisable(false);
+
+		
 	}
 
 	@FXML
@@ -128,8 +191,27 @@ public class RetirementController implements Initializable {
 		txtSaveEachMonth.setDisable(false);
 		txtWhatYouNeedToSave.setDisable(false);
 
-		// TODO: Calculate txtWhatYouNeedToSave value...
-		// TODO: Then calculate txtSaveEachMonth, using amount from txtWhatYouNeedToSave
-		// as input
+	
+		int iYearsToWork = Integer.parseInt(txtYearsToWork.getText());
+		double dAnnualReturnRetired = Double.parseDouble(txtAnnualReturnRetired.getText())/100;
+		int iYearsRetired = Integer.parseInt(txtYearsRetired.getText());;
+		double dAnnualReturnWorking = Double.parseDouble(txtAnnualReturnWorking.getText())/100;
+		double dRequiredIncome = Double.parseDouble(txtRequiredIncome.getText());
+		double dMonthlySSI = Double.parseDouble(txtMonthlySSI.getText());
+		
+		Retirement r = new Retirement(iYearsToWork, dAnnualReturnWorking, iYearsRetired, dAnnualReturnRetired,
+			dRequiredIncome, dMonthlySSI);
+		
+		double WhatYouNeedToSave = r.TotalAmountToSave();
+		double SaveEachMonth = (r.TotalAmountToSave())/12.0;
+		
+		Double.toString(WhatYouNeedToSave);
+		Double.toString(SaveEachMonth);
+		
+		txtWhatYouNeedToSave.setText(String.valueOf(WhatYouNeedToSave));
+		txtSaveEachMonth.setText(String.valueOf(SaveEachMonth));
+
+	
+	
 	}
 }
